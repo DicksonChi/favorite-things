@@ -1,0 +1,29 @@
+[
+  {
+    "model": "main.thingcategory",
+    "pk": "0c9b1a56-960b-4020-a0b2-6f961803fefa",
+    "fields": {
+      "name": "Place",
+      "system_default": true,
+      "date_added": "2019-08-08T21:55:54.222Z"
+    }
+  },
+  {
+    "model": "main.thingcategory",
+    "pk": "0c9b1a56-960b-4020-a0b2-7f961803fefa",
+    "fields": {
+      "name": "Person",
+      "system_default": true,
+      "date_added": "2019-08-08T21:55:54.222Z"
+    }
+  },
+  {
+    "model": "main.thingcategory",
+    "pk": "0c9b1a56-960b-4020-a0b2-8f961803fefa",
+    "fields": {
+      "name": "Food",
+      "system_default": true,
+      "date_added": "2019-08-08T21:55:54.222Z"
+      }
+  }
+]
