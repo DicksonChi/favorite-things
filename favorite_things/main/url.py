@@ -7,8 +7,8 @@ app_name = "main"
 
 urlpatterns = [
     url(r'^GetCategory/(?P<user>[0-9a-f-]+)/$', views.GetCategory.as_view(), name='get_category'),
-    url(r'^register/$', views.UserCreateView.as_view(), name='add_user'),
-    url(r'^find/(?P<email>\w+|[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/$',
+    url(r'^Register/$', views.UserCreateView.as_view(), name='add_user'),
+    url(r'^Find/(?P<email>\w+|[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/$',
         views.UserRetrieveView.as_view(),
         name='find_user'),
     url(r'^GetLog/(?P<user_id>[0-9a-f-]+)/$', views.GetUserLog.as_view(), name='get_user_log'),
