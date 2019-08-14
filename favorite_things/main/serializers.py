@@ -37,7 +37,6 @@ class FavThingSerializer(serializers.ModelSerializer):
             queryset=User.objects.all(),
             slug_field='id'
         )
-        id = serializers.CharField(required=False, allow_blank=True)
         fields = ('id', 'title', 'ranking', 'description', 'category', 'metadata',
                   'user', 'date_added', 'date_modified')
 
@@ -47,10 +46,6 @@ class FavThingUpdateSerializer(serializers.ModelSerializer):
         """Meta class for the fav thing update serializer."""
 
         model = FavThing
-        id = serializers.IntegerField(read_only=True)
-        ranking = serializers.CharField(required=False, allow_blank=True)
-        title = serializers.CharField(required=False, allow_blank=True)
-        description = serializers.CharField(required=False, allow_blank=True)
         category = serializers.SlugRelatedField(
             queryset=ThingCategory.objects.all(),
             slug_field='id'

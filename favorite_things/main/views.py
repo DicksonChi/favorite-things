@@ -7,6 +7,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from main.models import FavThing, ThingCategory, LogAction, User
+from main.constants import (OPERATION_ADD,
+                            OPERATION_DESTROY,
+                            OPERATION_MODIFY,
+                            SUCCESS_CODE,
+                            ERROR_CODE)
 from main.serializers import (FavThingSerializer,
                               ThingCategorySerializer,
                               LogActionSerializer,
@@ -14,7 +19,7 @@ from main.serializers import (FavThingSerializer,
                               FavThingUpdateSerializer)
 
 
-def reorder_ranking(ranking, category, user, current_ranking=None, operation="ADD"):
+def reorder_ranking(ranking, category, user, current_ranking=None, operation=OPERATION_ADD):
     """
     Reorder ranking function is responsible for reordering the ranking when there is an update.
 
@@ -29,11 +34,12 @@ def reorder_ranking(ranking, category, user, current_ranking=None, operation="AD
     similar_rank = FavThing.objects.filter(ranking=ranking,
                                            user__id=user,
                                            category__id=category).exists()
-    if not similar_rank and operation != "DESTROY":
+    if not similar_rank and operation != OPERATION_DESTROY:
         return
 
     # ok for adding operation you increment.
     # for Editing swap.
+    # for destroy you decrement
     if operation == "ADD":
         FavThing.objects.filter(ranking__gte=ranking,
                                 user__id=user,
@@ -59,13 +65,13 @@ class UserCreateView(APIView):
         if serializer.is_valid():
             user = serializer.save()
 
-            response = {"code": "010",
+            response = {"code": SUCCESS_CODE,
                         "id": user.id,
                         "email": serializer.validated_data["email"],
                         }
             return Response(response, status=status.HTTP_201_CREATED)
 
-        response = {"code": "020",
+        response = {"code": ERROR_CODE,
                     "errors": serializer.errors
                     }
 
@@ -81,7 +87,7 @@ class UserRetrieveView(generics.RetrieveAPIView):
         """Handle retrieving user."""
         res = super(UserRetrieveView, self).get(request, *args, **kwargs)
         data = res.data
-        data["code"] = "010"
+        data["code"] = SUCCESS_CODE
         data["id"] = self.get_object().id
         return Response(data)
 
@@ -97,7 +103,7 @@ class GetCategory(generics.ListAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
 
-        res = {"code": "010",
+        res = {"code": SUCCESS_CODE,
                "categories": serializer.data
                }
 
@@ -124,12 +130,12 @@ class CategoryCreateView(APIView):
                 action=LogAction.AUDIT_LOG_ADD_CATEGORY,
                 responsible=category.user
             )
-            response = {"code": "010",
+            response = {"code": SUCCESS_CODE,
                         "message": "success"
                         }
             return Response(response, status=status.HTTP_201_CREATED)
 
-        response = {"code": "020",
+        response = {"code": ERROR_CODE,
                     "errors": serializer.errors
                     }
         return Response(response, status=status.HTTP_400_BAD_REQUEST)
@@ -149,7 +155,7 @@ class GetFavThings(generics.ListAPIView):
                 data['metadata'] = json.loads(data['metadata'])
             except Exception:  # NOQA (ignore all errors on this line)
                 data['metadata'] = []
-        res = {"code": "010",
+        res = {"code": SUCCESS_CODE,
                "favThings": serializer.data}
         return Response(res)
 
@@ -175,12 +181,12 @@ class FavThingsCreateView(APIView):
                 action=LogAction.AUDIT_LOG_ADD,
                 responsible=fav_thing.user
             )
-            response = {"code": "010",
+            response = {"code": SUCCESS_CODE,
                         "message": "success"
                         }
             return Response(response, status=status.HTTP_201_CREATED)
 
-        response = {"code": "020",
+        response = {"code": ERROR_CODE,
                     "errors": serializer.errors
                     }
         return Response(response, status=status.HTTP_400_BAD_REQUEST)
@@ -197,7 +203,7 @@ class FavThingRetrieveUpdateView(generics.UpdateAPIView):
         try:
             instance = self.get_object()
         except Http404:
-            response = {"code": "020",
+            response = {"code": ERROR_CODE,
                         "errors": "not found"
                         }
             return Response(response, status=status.HTTP_404_NOT_FOUND)
@@ -208,7 +214,7 @@ class FavThingRetrieveUpdateView(generics.UpdateAPIView):
                             request.data['category'],
                             request.data['user'],
                             current_ranking=instance.ranking,
-                            operation="UPDATE")
+                            operation=OPERATION_MODIFY)
             self.perform_update(serializer)
             if getattr(instance, '_prefetched_objects_cache', None):
                 # If 'prefetch_related' has been applied to a queryset, we need to
@@ -221,13 +227,13 @@ class FavThingRetrieveUpdateView(generics.UpdateAPIView):
                 responsible=self.get_object().user
             )
 
-            response = {"code": "010",
+            response = {"code": SUCCESS_CODE,
                         "status": "Updated the record"
                         }
 
             return Response(response, status=status.HTTP_200_OK)
 
-        response = {"code": "020",
+        response = {"code": ERROR_CODE,
                     "errors": serializer.errors
                     }
 
@@ -257,7 +263,7 @@ class FavThingDestroy(generics.DestroyAPIView):
             action=LogAction.AUDIT_LOG_DELETE,
             responsible=user
         )
-        reorder_ranking(ranking=rank, category=category.id, user=user.id, operation="DESTROY")
+        reorder_ranking(ranking=rank, category=category.id, user=user.id, operation=OPERATION_DESTROY)
         return response
 
 
@@ -269,7 +275,7 @@ class GetUserLog(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         serializer = self.get_serializer(queryset, many=True)
-        res = {"code": "010",
+        res = {"code": SUCCESS_CODE,
                "logs": serializer.data}
         return Response(res)
 

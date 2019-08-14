@@ -111,22 +111,12 @@ class User(AbstractUser):
         return self.email
 
 
-class FavAbstractModel(models.Model):
-    """Creating the abstract base class for models in this app."""
-
+class ThingCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    date_added = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        """Define the meta properties of the class."""
-
-        abstract = True
-
-
-class ThingCategory(FavAbstractModel):
     name = models.CharField(max_length=20)
     user = models.ForeignKey('main.User', on_delete=models.CASCADE, null=True, related_name="category_user")
     system_default = models.BooleanField(default=False)
+    date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         """
@@ -137,9 +127,10 @@ class ThingCategory(FavAbstractModel):
         return self.name
 
 
-class FavThing(FavAbstractModel):
+class FavThing(models.Model):
     """Creating the model for the favorite thing the likes with it's properties."""
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=20)
     ranking = models.IntegerField()
     description = models.CharField(max_length=200, null=True, blank=True)
@@ -147,6 +138,7 @@ class FavThing(FavAbstractModel):
     category = models.ForeignKey('main.ThingCategory', on_delete=models.CASCADE, related_name="thing_category")
     user = models.ForeignKey('main.User', on_delete=models.CASCADE, null=True, related_name="thing_user")
     metadata = models.TextField(blank=True)
+    date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         """Extra model properties."""

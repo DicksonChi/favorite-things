@@ -96,7 +96,7 @@ class FavoriteTests(TestCase):
         )
         self.user.refresh_from_db()
 
-        # check again after adding a favorite thing to this user
+        # check again after adding a favorite thing for this user
         response = self.client.get(
             reverse('main:get_fav_thing', kwargs={'category': self.category.id, 'user': self.user.id})
         )

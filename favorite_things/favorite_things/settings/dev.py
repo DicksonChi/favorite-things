@@ -3,6 +3,12 @@ DEBUG = True
 
 PAGE_CACHE_SECONDS = 1
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'gxtx=5weofli6n=rt86h=e1p^3kztw@xtu6i@z^t5$k$3e(j(1'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -15,27 +21,3 @@ DATABASES = {
 }
 
 ALLOWED_HOSTS += ['*']  # NOQA
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'root': {'level': 'DEBUG', 'handlers': ['django_rest_logger_handler']},
-    'formatters': {'verbose': {'format': '%(levelname)s %(asctime)s %(module)s ' '%(process)d %(thread)d %(message)s'}},
-    'handlers': {
-        'django_rest_logger_handler': {'level': 'DEBUG', 'class': 'logging.StreamHandler', 'formatter': 'verbose'}
-    },
-    'loggers': {
-        'django.db.backends': {'level': 'ERROR', 'handlers': ['django_rest_logger_handler'], 'propagate': False},
-        'django_rest_logger': {'level': 'DEBUG', 'handlers': ['django_rest_logger_handler'], 'propagate': False},
-    },
-}
-
-CACHES = {'default': {'BACKEND': 'django.core.cache.backends.dummy.DummyCache'}}
-
-DEFAULT_LOGGER = 'django_rest_logger'
-
-LOGGER_EXCEPTION = DEFAULT_LOGGER
-LOGGER_ERROR = DEFAULT_LOGGER
-LOGGER_WARNING = DEFAULT_LOGGER
-
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
