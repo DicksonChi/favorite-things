@@ -81,7 +81,7 @@ for linting issues in the python code and alerts you to conform to the standard.
 and fixes to your Vue.js code
 
 
-## Approach to solving this test
+## Deployment
 
 * 
 
