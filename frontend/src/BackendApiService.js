@@ -5,13 +5,13 @@ export class APIService {
   constructor() {}
 
   getUser(email) {
-    const url = `${API_URL}/api/find/${email}/`;
+    const url = `${API_URL}/api/Find/${email}/`;
     const response = axios.get(url);
     return response;
   }
 
   createUser(email) {
-    const url = `${API_URL}/api/register/`;
+    const url = `${API_URL}/api/Register/`;
     const response = axios.post(url, { email });
     return response;
   }

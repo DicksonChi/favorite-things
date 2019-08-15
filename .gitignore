@@ -35,6 +35,7 @@ coverage.xml
 
 # Django stuff:
 *.log
+.prospector.yml
 local_settings.py
 
 # pyenv

@@ -7,7 +7,7 @@ uses:
 ignore-patterns:
   - ^setup.py$
   - wsgi.py$
-  - ^static
+
 
 pylint:
   disable:
