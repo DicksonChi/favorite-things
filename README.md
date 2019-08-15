@@ -1,8 +1,8 @@
-# My Favorite Things Test
+# Coding Test
 
 ## Test Description and Approach
 This is a Single Page Application created with VueJs and consumes a REST API created with Django
-to show the list of categories and the ranking of the favorite things under each categories  
+to show the list of categories and the ranking of the favorite things under each categories.  
 
 This solution can allow for usage by different users without using 
 authentication but just a simple id that is saved on their browser once 
@@ -20,7 +20,7 @@ next time.
  favorites under those categories. 
 
 * On the right side of the screen the users see the log of their actions 
-performed by them on the application and the time they were performed 
+performed by them on the application and the time they were performed. 
 
 ## Readme Notes
 
@@ -32,7 +32,7 @@ performed by them on the application and the time they were performed
 * `$ source virtualenv/bin/activate`
 
 ##### TO INSTALL DEPENDENCIES FOR THE BACKEND
-* `$ pip install -r py-requirements/local.txt`
+* `$ pip install -r py-requirements/dev.txt`
 
 ##### TO INSTALL DEPENDENCIES FOR THE FRONTEND
 * `$ cd frontend`
