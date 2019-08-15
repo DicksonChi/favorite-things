@@ -1,4 +1,26 @@
-# My Favorite Things
+# My Favorite Things Test
+
+## Test Description and Approach
+This is a Single Page Application created with VueJs and consumes a REST API created with Django
+to show the list of categories and the ranking of the favorite things under each categories  
+
+This solution can allow for usage by different users without using 
+authentication but just a simple id that is saved on their browser once 
+they type in the email they want to use.
+
+* If the user has not used the application before it registers them with
+that email. If they have used it before they continue with that email the
+next time.
+
+* There are defaults categories for every user in the system. 
+    * Person
+    * Place
+    * Food  
+* The user can add more categories if he wishes to and can also add, edit and delete
+ favorites under those categories. 
+
+* On the right side of the screen the users see the log of their actions 
+performed by them on the application and the time they were performed 
 
 ## Readme Notes
 
@@ -44,6 +66,8 @@
 * after running the test there might be `.pyc ` or `__pycache__` files
 so this script runs through all directories and cleans up.
 
+
+## Linting
 ##### Linting and static analysis backend
 * `$ ./scripts/static_validate_backend.sh`
 * This script checks for the PEP issues with the python code and uses 
@@ -57,6 +81,8 @@ for linting issues in the python code and alerts you to conform to the standard.
 and fixes to your Vue.js code
 
 
-## Approach
+## Approach to solving this test
+
+* 
 
 
