@@ -6,7 +6,7 @@ __pycache__/
 # vue node modules
 frontend/node_modules
 frontend/npm_debug
-
+dist
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
