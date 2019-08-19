@@ -6,6 +6,7 @@ __pycache__/
 # vue node modules
 frontend/node_modules
 frontend/npm_debug
+dist
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -18,6 +19,7 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
+coverage
 htmlcov/
 .tox/
 .nox/
@@ -29,6 +31,7 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+*.zip
 
 # Translations
 *.dot

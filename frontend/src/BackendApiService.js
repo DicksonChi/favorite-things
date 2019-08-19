@@ -1,6 +1,6 @@
 import axios from "axios";
 import api_url from "./constants.js";
-const API_URL = api_url.DEV; // change when in production to api_url.PROD
+const API_URL = api_url.PROD; // change when in production to api_url.PROD
 export class APIService {
   constructor() {}
 

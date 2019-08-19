@@ -1,4 +1,10 @@
-# Coding Test
+#  Favorite Things Coding Test
+* [Test Description and Approach](#test-description-and-approach)
+* [Installation](#installation)
+* [Running Locally](#running)
+* [Testing](#testing)
+* [Linting](#testing)
+* [Deployment](#deployment)
 
 ## Test Description and Approach
 This is a Single Page Application created with VueJs and consumes a REST API created with Django
@@ -83,6 +89,108 @@ and fixes to your Vue.js code
 
 ## Deployment
 
-* 
+##### Backend Deployment
+*  run this command
 
+* `$ cd frontend
+   $  ./scripts/get_ready_for_deployment.sh
+`
 
+* Update the settings file in favorite_things/favorite_things and add zappa_django_utils in the list of apps
+
+* cd to the path where the `manage.py` file is and then run 
+`$ zappa init` 
+
+* Provide default settings to your zappa_settings.json file:
+
+```
+- Name of environment - just accept the default 'dev'
+- S3 bucket for deployments - just accept the default
+- Zappa should automatically find the correct Django settings file so accept the default
+```
+
+* Go to your AWS console and create the VPC and then then the RDS and then update the zappa_settings.json file
+```
+    "vpc_config" : {
+            "SubnetIds": [ "your-subnet-1", "your-subnet-2"],
+            "SecurityGroupIds": ["your-security-group"]
+        },
+        "environment_variables": {
+            "AWS_REGION": "YOUR_AWS_REGION",
+            "AWS_SECRET_ACCESS_KEY": "YOUR AWS SECRET KEY IN YOUR .aws/credentials FILE",
+            "AWS_ACCESS_KEY_ID": "YOUR AWS KEY ID IN YOUR .aws/credentials FILE",
+            "SECRET_KEY": "YOUR_SECRET_KEY",
+            "DATABASE_URL": "psql://USER:PASS@RDS_ENDPOINT:5432/DB_NAME"
+        },
+```
+* Now run `$ zappa deploy <STAGE NAME>`
+you should get this message 
+```
+    Scheduled favorite-things-dev-zappa-keep-warm-handler.keep_warm_callback with expression rate(4 minutes)!
+Your updated Zappa deployment is live!: https://URI.REGION.amazonaws.com/STAGE_NAME
+```
+* create a new bucket for the static folder and add this to your settings
+```
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+AWS_S3_BUCKET_NAME_STATIC = "NEW_BUCKET_NAME"
+AWS_S3_BUCKET_AUTH_STATIC = True
+AWS_ACCESS_KEY_ID = "YOUR_KEY_ID"
+AWS_SECRET_ACCESS_KEY = "YOUR SECRET KEY"
+AWS_REGION = "YOUR REGION"
+STATICFILES_STORAGE = "django_s3_storage.storage.StaticS3Storage"
+AWS_S3_CUSTOM_DOMAIN = "{}.s3.amazonaws.com".format(AWS_S3_BUCKET_NAME_STATIC)
+STATIC_URL = "https://{}/".format(AWS_S3_CUSTOM_DOMAIN)
+```
+* Then run the command to update this deployment
+```
+$ zappa update <stage_name>
+```
+
+* Now run this command to collect static for the admin view
+```
+$ python manage.py collectstatic --noinput
+```
+
+* Now lets create the db. Since we already have the VPC and the RDS setup
+run this command
+```
+$ zappa manage <STAGE_NAME> create_pg_db
+```
+
+* If you get the error message that a db with same name exists, then ignore
+
+* Now let us migrate, load fixtures and create admin user
+```
+$ zappa manage <STAGE_NAME> migrate
+$ zappa invoke --raw dev "loaddata fixtures/default_category.json"
+$ zappa invoke --raw dev "from main.models import User; User.objects.create_superuser(email='admin@ybritecore.com', password='password')"
+```
+
+##### Frontend Deployment
+* After deploying the backend code get the endpoint URL and update the PROD constant in constants.js file in 
+`frontend/src` 
+
+* create the s3 bucket that will collect the static files for the frontend.
+
+* Go to the bucket permission and then under the cors configuration copy this code to allow for public access
+``` 
+    <?xml version="1.0" encoding="UTF-8"?>
+    <CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+    <CORSRule>
+        <AllowedOrigin>*</AllowedOrigin>
+        <AllowedMethod>GET</AllowedMethod>
+        <MaxAgeSeconds>3000</MaxAgeSeconds>
+        <AllowedHeader>Authorization</AllowedHeader>
+    </CORSRule>
+    </CORSConfiguration>
+```
+
+* `$ cd frontend
+   $  . ../scripts/build_frontend.sh
+`
+* run this command 
+`aws s3 cp dist/ s3://NAME_OF_THE_BUCKET_YOU_CREATED`
+
+* Copy the endpoint and access it from your browser.
+* Now you too can now make a list of your own favorite things!
