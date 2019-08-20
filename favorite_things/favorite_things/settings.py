@@ -3,7 +3,7 @@
 import os
 import environ
 # Load operating system environment variables and then prepare to use them
-env = environ.Env()
+ENV = environ.Env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -107,13 +107,13 @@ FIXTURE_DIR = os.path.join(BASE_DIR, "fixtures")
 PAGE_CACHE_SECONDS = 1
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = ENV("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 DATABASES = {
-    'default': env.db("DB_URL", "psql://USER:PASS@RDS_ENDPOINT:5432/DB_NAME")
+    'default': ENV.db("DB_URL", "psql://USER:PASS@RDS_ENDPOINT:5432/DB_NAME")
 
 }
 

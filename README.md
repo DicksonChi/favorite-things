@@ -46,58 +46,51 @@ performed by them on the application and the time they were performed.
 * If the command line starts with #, the command should run with root privileges
 
 ## Installation
-* git clone git@github.com:DicksonChi/favorite-things.git
+* `git clone git@github.com:DicksonChi/favorite-things.git`
 * `$ cd favorite_things`
 * `$ virtualenv -p /usr/bin/python3 virtualenv`
 * `$ source virtualenv/bin/activate`
 
 ##### TO INSTALL DEPENDENCIES FOR THE BACKEND
-* `$ pip install -r py-requirements/dev.txt`
+* `$ make requirements_dev`
 
 ##### TO INSTALL DEPENDENCIES FOR THE FRONTEND
-* `$ cd frontend`
-* `$ npm install`
+* `$ make install-fd`
 
 ## Running
 
 ##### TO RUN BACKEND
-* `$ cd favorite_things `
-* `$ python manage.py migrate`
-* `$ python manage.py runserver`
+* `$ make migrate`
+* `$ make run`
+* `$ make superuser` to create superuser
 
 
 ##### TO RUN FRONTEND
-* `$ cd frontend `
-* `$ npm run serve`
+* `$ make serve `
 
 
 ## Testing
 
-##### Test backend
-* `$ ./scripts/test_local_backend.sh`
-* This scripts runs the `pytest` command and then creates coverage report when run. 
-
-##### Test frontend
-* `$ ./scripts/test_local_frontend.sh`
-* This scripts runs the `npm run coverage` command.
+* `$ make test`
+* This command runs the `pytest` command and then creates coverage report when run. 
 
 ##### cleanup after testing
-* `$ ./scripts/cleanup.sh`
+* `$ make clean`
 * after running the test there might be `.pyc ` or `__pycache__` files
-so this script runs through all directories and cleans up.
+so this command runs through all directories and cleans up.
 
 
 ## Linting
 ##### Linting and static analysis backend
-* `$ ./scripts/static_validate_backend.sh`
-* This script checks for the PEP issues with the python code and uses 
+* `$ make lint_backend`
+* This command checks for the PEP issues with the python code and uses 
 the `prospector.yml` defined conditions and using pylint to also check 
 for linting issues in the python code and alerts you to conform to the standard.
 
 ##### Linting and static analysis frontend
-* `$ ./scripts/static_validate_backend.sh`
+* `$ make lint_frontend`
 
-* The script runs the `npm run lint` command to apply linting
+* The command runs the `npm run lint` command to apply linting
 and fixes to your Vue.js code
 
 
@@ -106,13 +99,7 @@ and fixes to your Vue.js code
 ##### Backend Deployment
 *  run this command
 
-  ` $  ./scripts/get_ready_for_deployment.sh`
-
-* Update the settings file in favorite_things/favorite_things and add zappa_django_utils in the list of apps
-
-* cd to the path where the `manage.py` file is and then run 
-
-`$ zappa init` 
+  ` $ make backend_deploy_start`
 
 * Provide default settings to your zappa_settings.json file:
 
@@ -121,6 +108,8 @@ and fixes to your Vue.js code
 - S3 bucket for deployments - just accept the default
 - Zappa should automatically find the correct Django settings file so accept the default
 ```
+
+* Update the settings file in favorite_things/favorite_things and add zappa_django_utils in the list of apps
 
 * Go to your AWS console and create the VPC and then then the RDS and then update the zappa_settings.json file
 ```
@@ -136,7 +125,7 @@ and fixes to your Vue.js code
             "DATABASE_URL": "psql://USER:PASS@RDS_ENDPOINT:5432/DB_NAME"
         },
 ```
-* Now run `$ zappa deploy <STAGE NAME>`
+* Now run `$ make stage=YOUR_STAGE_NAME backend_deploy`
 you should get this message 
 ```
 Scheduled favorite-things-dev-zappa-keep-warm-handler.keep_warm_callback with expression rate(4 minutes)!
@@ -158,27 +147,27 @@ STATIC_URL = "https://{}/".format(AWS_S3_CUSTOM_DOMAIN)
 ```
 * Then run the command to update this deployment
 ```
-$ zappa update <stage_name>
+$ make stage=STAGE_NAME backend_update
 ```
 
 * Now run this command to collect static for the admin view
 ```
-$ python manage.py collectstatic --noinput
+$ make collectstatic
 ```
 
 * Now lets create the db. Since we already have the VPC and the RDS setup
 run this command
 ```
-$ zappa manage <STAGE_NAME> create_pg_db
+$ make stage=STAGE_NAME backend_create_db
 ```
-
+note please replace the STAGE_NAME with the stage name you want to deploy
 * If you get the error message that a db with same name exists, then ignore
 
 * Now let us migrate, load fixtures and create admin user
 ```
-$ zappa manage <STAGE_NAME> migrate
-$ zappa invoke --raw dev "loaddata fixtures/default_category.json"
-$ zappa invoke --raw dev "from main.models import User; User.objects.create_superuser(email='admin@ybritecore.com', password='password')"
+$ make stage=STAGE_NAME backend_migrate
+$ make command="loaddata fixtures/default_category.json" backend_command
+$ make command="from main.models import User; User.objects.create_superuser(email='admin@ybritecore.com', password='password') backend_command"
 ```
 
 ##### Frontend Deployment
@@ -202,10 +191,7 @@ $ zappa invoke --raw dev "from main.models import User; User.objects.create_supe
 
 * run this command to then deploy the frontend
 
-* `$ cd frontend`
-
-  `$  . ../scripts/build_frontend.sh  s3://NAME_OF_THE_BUCKET_YOU_CREATED`
-
+* `$ make bucket=s3://YOUR_BUCKET build_deploy`
 
 * Copy the url of the static bucket and access it from your browser.
 * Now you too can now make a list of your own favorite things!
