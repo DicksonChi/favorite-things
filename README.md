@@ -1,4 +1,5 @@
 #  Favorite Things Coding Test
+* [Dependencies](#dependencies)
 * [Test Description and Approach](#test-description-and-approach)
 * [Installation](#installation)
 * [Running Locally](#running)
@@ -6,19 +7,30 @@
 * [Linting](#testing)
 * [Deployment](#deployment)
 
+## Dependencies
+
+This project makes use of the tech stack and more:
+
+* Python 3.6 - Programming language
+* Django REST framework - REST endpoint
+* VueJs for the frontend development
+* AWS LAMBDA and s3 bucket
+* Zappa for deployment
+
+
 ## Test Description and Approach
 This is a Single Page Application created with VueJs and consumes a REST API created with Django
 to show the list of categories and the ranking of the favorite things under each categories.  
 
 This solution can allow for usage by different users without using 
 authentication but just a simple id that is saved on their browser once 
-they type in the email they want to use.
+they enter the email they want to use.
 
 * If the user has not used the application before it registers them with
 that email. If they have used it before they continue with that email the
 next time.
 
-* There are defaults categories for every user in the system. 
+* There are default categories for every user in the system. 
     * Person
     * Place
     * Food  
@@ -92,13 +104,12 @@ and fixes to your Vue.js code
 ##### Backend Deployment
 *  run this command
 
-* `$ cd frontend
-   $  ./scripts/get_ready_for_deployment.sh
-`
+  ` $  ./scripts/get_ready_for_deployment.sh`
 
 * Update the settings file in favorite_things/favorite_things and add zappa_django_utils in the list of apps
 
 * cd to the path where the `manage.py` file is and then run 
+
 `$ zappa init` 
 
 * Provide default settings to your zappa_settings.json file:
@@ -126,8 +137,9 @@ and fixes to your Vue.js code
 * Now run `$ zappa deploy <STAGE NAME>`
 you should get this message 
 ```
-    Scheduled favorite-things-dev-zappa-keep-warm-handler.keep_warm_callback with expression rate(4 minutes)!
-Your updated Zappa deployment is live!: https://URI.REGION.amazonaws.com/STAGE_NAME
+Scheduled favorite-things-dev-zappa-keep-warm-handler.keep_warm_callback with expression rate(4 minutes)!
+Deploying..
+Your application is now live at https://URI.REGION.amazonaws.com/STAGE_NAME
 ```
 * create a new bucket for the static folder and add this to your settings
 ```
@@ -186,11 +198,12 @@ $ zappa invoke --raw dev "from main.models import User; User.objects.create_supe
     </CORSConfiguration>
 ```
 
-* `$ cd frontend
-   $  . ../scripts/build_frontend.sh
-`
-* run this command 
-`aws s3 cp dist/ s3://NAME_OF_THE_BUCKET_YOU_CREATED`
+* run this command to then deploy the frontend
 
-* Copy the endpoint and access it from your browser.
+* `$ cd frontend`
+
+  `$  . ../scripts/build_frontend.sh  s3://NAME_OF_THE_BUCKET_YOU_CREATED`
+
+
+* Copy the url of the static bucket and access it from your browser.
 * Now you too can now make a list of your own favorite things!

@@ -11,7 +11,7 @@ the user. It could be on the user's social media page(s)
 
 ## 2. What was the most useful feature that was added to the latest version of your chosen language
 
-* The latest version added I used was the new and fast way to format
+* The latest feature in python 3.6 added I used was the new and fast way to format
 strings in python. 
 In my  `main.views.py` I made use of this function to format strings 
 and it helped made my code cleaner and saved my time.
