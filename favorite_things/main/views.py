@@ -40,11 +40,11 @@ def reorder_ranking(ranking, category, user, current_ranking=None, operation=OPE
     # ok for adding operation you increment.
     # for Editing swap.
     # for destroy you decrement
-    if operation == "ADD":
+    if operation == OPERATION_ADD:
         FavThing.objects.filter(ranking__gte=ranking,
                                 user__id=user,
                                 category__id=category).update(ranking=F("ranking") + 1)
-    elif operation == "DESTROY":
+    elif operation == OPERATION_DESTROY:
         FavThing.objects.filter(ranking__gte=ranking,
                                 user__id=user,
                                 category__id=category).update(ranking=F("ranking") - 1)
@@ -53,7 +53,8 @@ def reorder_ranking(ranking, category, user, current_ranking=None, operation=OPE
         FavThing.objects.filter(ranking=ranking,
                                 user__id=user,
                                 category__id=category).update(ranking=current_ranking)
-        return
+
+    return
 
 
 class UserCreateView(APIView):
