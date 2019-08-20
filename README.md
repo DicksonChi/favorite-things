@@ -46,6 +46,8 @@ performed by them on the application and the time they were performed.
 * If the command line starts with #, the command should run with root privileges
 
 ## Installation
+* git clone git@github.com:DicksonChi/favorite-things.git
+* `$ cd favorite_things`
 * `$ virtualenv -p /usr/bin/python3 virtualenv`
 * `$ source virtualenv/bin/activate`
 
