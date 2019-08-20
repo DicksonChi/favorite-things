@@ -167,7 +167,7 @@ note please replace the STAGE_NAME with the stage name you want to deploy
 ```
 $ make stage=STAGE_NAME backend_migrate
 $ make command="loaddata fixtures/default_category.json" backend_command
-$ make command="from main.models import User; User.objects.create_superuser(email='admin@ybritecore.com', password='password') backend_command"
+$ make command="from main.models import User; User.objects.create_superuser(email='admin@ybritecore.com', password='password')" backend_command
 ```
 
 ##### Frontend Deployment
