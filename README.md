@@ -12,7 +12,7 @@
 This project makes use of the tech stack and more:
 
 * Python 3.6 - Programming language
-* Django REST framework - REST endpoint
+* Django REST framework - REST API
 * VueJs for the frontend development
 * AWS LAMBDA and s3 bucket
 * Zappa for deployment
