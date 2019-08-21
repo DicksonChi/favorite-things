@@ -107,16 +107,16 @@
         </form>
       </div>
     </modal>
-    <div class="col-1">
+    <div class="col-lg-1 col-sm-4">
       {{ favorite.ranking }}
     </div>
-    <div class="col-3">
+    <div class="col-lg-3 show">
       {{ favorite.title }}
     </div>
-    <div class="col-4">
+    <div class="col-lg-4 show">
       {{ favorite.date_added | moment }}
     </div>
-    <div class="col-4 action">
+    <div class="col-lg-4 col-sm-8 action">
       <button
         class="btn btn-sm"
         title="view other information associated to this thing"
@@ -229,8 +229,16 @@ export default {
   color: rgb(21, 156, 235);
   margin: 5px;
 }
+.show {
+  display: block;
+}
 .btn:hover {
   background-color: rgb(21, 156, 235);
   color: white;
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+  .show {
+    display: none;
+  }
 }
 </style>

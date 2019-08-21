@@ -2,10 +2,10 @@
   <div>
     <!-- form here to add a new favorite-->
     <div class="fav-head row">
-      <div class="col-1">Rank</div>
-      <div class="col-4">Title</div>
-      <div class="col-4">Date Added</div>
-      <div class="col-3 action">Actions</div>
+      <div class="col-lg-1 col-sm-4">Rank</div>
+      <div class="col-lg-4 show">Title</div>
+      <div class="col-lg-4 show">Date Added</div>
+      <div class="col-lg-3 col-sm-8 action">Actions</div>
     </div>
     <div v-bind:key="favorite.id" v-for="favorite in favorites">
       <FavoriteItem
@@ -38,5 +38,13 @@ export default {
   padding: 10px;
   color: aliceblue;
   border-bottom: 1px #ccc dotted;
+}
+.show {
+  display: block;
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+  .show {
+    display: none;
+  }
 }
 </style>

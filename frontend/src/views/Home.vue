@@ -4,7 +4,7 @@
 
     <!-- for the categories-->
     <div class="row block">
-      <div class="col-6">
+      <div class="col-lg-6 col-sm-12">
         <h3 align="center">Categories</h3>
         <Categories
           v-bind:categories="categories"
@@ -14,7 +14,7 @@
       </div>
 
       <!-- for the logs-->
-      <div class="col-6">
+      <div class="col-lg-6 col-sm-12">
         <h3 align="center">Logs</h3>
         <Logs v-bind:logs="logs" />
       </div>
