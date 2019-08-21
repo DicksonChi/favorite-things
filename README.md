@@ -41,13 +41,12 @@ next time.
 performed by them on the application and the time they were performed. 
 
 ## Installation
-`git clone git@github.com:DicksonChi/favorite-things.git`
-
-`$ cd favorite_things`
-
-`$ virtualenv -p /usr/bin/python3 virtualenv`
-
-`$ source virtualenv/bin/activate`
+```
+$ git clone git@github.com:DicksonChi/favorite-things.git
+$ cd favorite_things
+$ virtualenv -p /usr/bin/python3 virtualenv
+$ source virtualenv/bin/activate
+```
 
 
 ##### TO INSTALL DEPENDENCIES FOR THE BACKEND
@@ -101,11 +100,11 @@ and fixes to your Vue.js code*
 ## Deployment
 
 ##### Backend Deployment
-*  run this command
+run this command
 
   ` $ make backend_deploy_start`
 
-* Provide default settings to your zappa_settings.json file:
+Provide default settings to your zappa_settings.json file:
 
 ```
 - Name of environment - just accept the default 'dev'
@@ -113,10 +112,10 @@ and fixes to your Vue.js code*
 - Zappa should automatically find the correct Django settings file so accept the default
 ```
 
-* Update the settings file in favorite_things/favorite_things and add zappa_django_utils in the list of apps
+Update the settings file in favorite_things/favorite_things and add zappa_django_utils in the list of apps
 
-* Go to your AWS console and create the VPC and then then the RDS and then update the zappa_settings.json file
-```
+Go to your AWS console and create the VPC and then then the RDS and then update the zappa_settings.json file
+```JSON
     "vpc_config" : {
             "SubnetIds": [ "your-subnet-1", "your-subnet-2"],
             "SecurityGroupIds": ["your-security-group"]
@@ -129,15 +128,16 @@ and fixes to your Vue.js code*
             "DATABASE_URL": "psql://USER:PASS@RDS_ENDPOINT:5432/DB_NAME"
         },
 ```
-* Now run `$ make stage=YOUR_STAGE_NAME backend_deploy`
+
+Now run `$ make stage=YOUR_STAGE_NAME backend_deploy`
 you should get this message 
   ```
   Scheduled favorite-things-dev-zappa-keep-warm-handler.keep_warm_callback with expression rate(4 minutes)!
   Deploying..
   Your application is now live at https://URI.REGION.amazonaws.com/STAGE_NAME
   ```
-* create a new bucket for the static folder and add this to your settings
- ```
+create a new bucket for the static folder and add this to your settings
+ ```PYTHON
   STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
   AWS_S3_BUCKET_NAME_STATIC = "NEW_BUCKET_NAME"
@@ -149,27 +149,28 @@ you should get this message
   AWS_S3_CUSTOM_DOMAIN = "{}.s3.amazonaws.com".format(AWS_S3_BUCKET_NAME_STATIC)
   STATIC_URL = "https://{}/".format(AWS_S3_CUSTOM_DOMAIN)
 ```
-* Then run the command to update this deployment
+
+Then run the command to update this deployment
 
    ```
      $ make stage=STAGE_NAME backend_update
    ```
 
-* Now run this command to collect static for the admin view
+Now run this command to collect static for the admin view
 
   ```
    $ make collectstatic
   ```
 
-* Now lets create the db. Since we already have the VPC and the RDS setup
+Now lets create the db. Since we already have the VPC and the RDS setup
 run this command
   ```
    $ make stage=STAGE_NAME backend_create_db
    ```
 *note: please replace the STAGE_NAME with the stage name you want to deploy*
-* If you get the error message that a db with same name exists, then ignore
 
-* Now let us migrate, load fixtures and create admin user
+If you get the error message that a db with same name exists, then ignore
+ Now let us migrate, load fixtures and create admin user
 ```
 $ make stage=STAGE_NAME backend_migrate
 $ make command="loaddata fixtures/default_category.json" backend_command
@@ -177,14 +178,14 @@ $ make command="from main.models import User; User.objects.create_superuser(emai
 ```
 
 ##### Frontend Deployment
-* After deploying the backend code get the endpoint URL and update the PROD constant in constants.js file in 
+After deploying the backend code get the endpoint URL and update the PROD constant in constants.js file in 
 `frontend/src` 
 
-* create the s3 bucket that will collect the static files for the frontend.
+create the s3 bucket that will collect the static files for the frontend.
 
-* Go to the bucket permission and then under the cors configuration copy this code to allow for public access
-  ``` 
-    <?xml version="1.0" encoding="UTF-8"?>
+Go to the bucket permission and then under the cors configuration copy this code to allow for public access
+  ``` XML
+   <?xml version="1.0" encoding="UTF-8"?>
     <CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
     <CORSRule>
         <AllowedOrigin>*</AllowedOrigin>
@@ -195,9 +196,10 @@ $ make command="from main.models import User; User.objects.create_superuser(emai
     </CORSConfiguration>
   ```
 
-* run this command to then deploy the frontend
+run this command to then deploy the frontend
 
   `$ make bucket=s3://YOUR_BUCKET build_deploy`
 
-* Copy the url of the static bucket and access it from your browser.
-* Now you too can now make a list of your own favorite things!
+Copy the url of the static bucket and access it from your browser.
+
+Now you too can now make a list of your own favorite things!
