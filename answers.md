@@ -25,5 +25,5 @@ and it helped made my code cleaner and saved my time.
 Those point could then be used to plot a graph and then you could tell where much CPU time is consumed and then figure out how to optimize.
 This method of using sampling is called `statistical profiling`. 
 
-* I have not done it alone but I have had the opportunity to be part of a team to checked performance of an application in production.
+* I have not done it alone but I have had the opportunity to be part of a team that checks the performance of an application in production.
 
