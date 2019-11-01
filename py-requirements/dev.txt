@@ -1,6 +1,6 @@
 -r ./base.txt
 
-Werkzeug==0.14.1
+Werkzeug==0.15.3
 psycopg2-binary==2.8.3
 
 factory-boy==2.12.0
